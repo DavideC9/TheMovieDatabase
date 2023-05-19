@@ -4,10 +4,12 @@ import { HttpClientModule } from '@angular/common/http'; //import di httpClientM
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NavComponent } from './nav/nav.component';
 
 @NgModule({
   declarations: [
-    AppComponent  //viene importato questo componente
+    AppComponent,
+    NavComponent  //viene importato questo componente
   ],
   imports: [
     BrowserModule,

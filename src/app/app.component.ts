@@ -8,6 +8,7 @@ import { MovieService } from './movie.service';
 })
 export class AppComponent implements OnInit {
 
+
   popularMovies : any = [];
   title = 'TheMovieDatabase';
 
@@ -19,4 +20,7 @@ export class AppComponent implements OnInit {
     });
   }
 
+  newUser(){
+
+  }
 }
