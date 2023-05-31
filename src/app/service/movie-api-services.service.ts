@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MovieApiServicesService {
-   API_KEY = 'f872ad90dd12e535318c7200a765e5e5';
+   API_KEY = 'f872ad90dd1';
    API_URL = 'https://api.themoviedb.org/3/';
 
   constructor(private http: HttpClient)  { }
