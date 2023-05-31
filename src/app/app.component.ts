@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { MovieService } from './movie.service';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,15 +8,26 @@ import { MovieService } from './movie.service';
 export class AppComponent implements OnInit {
 
 
-  popularMovies : any = [];
-  title = 'TheMovieDatabase';
 
-  constructor(private movieService: MovieService) {}
+  title = 'TheMovieDatabase';
+  navbg: any;
+  @HostListener('document:scroll') scrollover(){
+    console.log(document.body.scrollTop,'scrolllength#');
+
+    if(document.body.scrollTop > 0 || document.documentElement.scrollTop > 0)
+    {
+      this.navbg = {
+        'background-color':'#000000'
+      }
+    }else
+    {
+        this.navbg = {}
+    }
+  }
+  constructor() {}
 
   ngOnInit() {
-    this.movieService.getPopularMovies().subscribe((data: any) => {
-      this.popularMovies = data.results;
-    });
+
   }
 
   newUser(){

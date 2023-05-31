@@ -1,7 +1,20 @@
-.navbar-brand {
-    color: #E50914;
+.navbar {
+    color: white;
     font-weight: bold;
+    align-nav-items: center;
+    z-index: 200;
+    transition: opacity .25s linear;
+    background-color: black;
+    -webkit-transition-property: background-color;
 }
 
+.navbar:hover {
+    background-color: #ff5c00;
+    /* opacity: 0.5; */
+}
 
-/* .navbar-nav {} */
+.navbar-brand {}
+
+.navbar-nav .nav-item .nav-link {
+    color: white;
+}
