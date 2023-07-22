@@ -4,7 +4,7 @@
     align-nav-items: center;
     z-index: 200;
     transition: opacity .25s linear;
-    background-color: black;
+    background-color: grey;
     -webkit-transition-property: background-color;
 }
 
