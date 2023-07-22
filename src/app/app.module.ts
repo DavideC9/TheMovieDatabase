@@ -1,3 +1,4 @@
+import { AuthComponent } from './auth/auth.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http'; //import di httpClientModule
@@ -12,6 +13,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { MovieApiServicesService } from './service/movie-api-services.service';
 
 import {ReactiveFormsModule} from "@angular/forms";
+import { CategoriesComponent } from './pages/categories/categories.component';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +22,9 @@ import {ReactiveFormsModule} from "@angular/forms";
     NavComponent,
     ListFilmComponent,
     FilmDetailComponent,
-    HomeComponent  //viene importato questo componente
+    HomeComponent,
+    CategoriesComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,

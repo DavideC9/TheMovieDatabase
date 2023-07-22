@@ -23,7 +23,7 @@ export class ListFilmComponent implements OnInit {
 
   searchResult:any;
   searchForm = new FormGroup({
-    'movieName':new FormControl(null)
+    'movieName': new FormControl(null)
   });
 
   submitForm()
