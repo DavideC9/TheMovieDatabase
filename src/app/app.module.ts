@@ -1,8 +1,8 @@
 import { AuthComponent } from './auth/auth.component';
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http'; //import di httpClientModule
-
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'; //import di httpClientModule
+// import { HttpInterceptorComponent } from './http-interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,7 +33,13 @@ import { CategoriesComponent } from './pages/categories/categories.component';
 
     ReactiveFormsModule
   ],
-  providers: [MovieApiServicesService],
+  providers: [MovieApiServicesService,
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: HttpInterceptorComponent,
+    //   multi: true,
+    // },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

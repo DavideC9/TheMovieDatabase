@@ -1,77 +1,99 @@
+import { AlertServiceService } from './alert-service.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class MovieApiServicesService {
-   API_KEY = 'f872ad90dd1';
+  //  API_KEY = 'f872ad90dd1';
+  API_KEY = 'f872ad90dd';
    API_URL = 'https://api.themoviedb.org/3/';
 
-  constructor(private http: HttpClient)  { }
+  constructor(private http: HttpClient, private alertService: AlertServiceService)  { }
 
 
-searchFilms(query: string) {
-  const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
-  return this.http.get(url);
-}
+  searchFilms(query: string) {
+    const url = `${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${query}`;
+    return this.http.get(url).pipe(
+      catchError(error => {
+        this.alertService.showError('Errore durante la ricerca dei film.');
+        return throwError(error);
+      })
+    );
+  }
 
-//filmpopolari
-getPopularMovies(): Observable<any> {
-  return this.http.get(`${this.API_URL}movie/popular?api_key=${this.API_KEY}`);
-}
-/*Utilizzo il metodo `get`
- di HttpClient per effettuare una
-  richiesta GET all'API TMDb, fornendo
-  l'endpoint specifico e
-  l'API key come parametri.
-  per i film popolari, uso l'endpoint
-   `popular`*/
-
-   //bannerapidata
+  getPopularMovies(): Observable<any> {
+    return this.http.get(`${this.API_URL}movie/popular?api_key=${this.API_KEY}`).pipe(
+      catchError(error => {
+        this.alertService.showError('Errore durante il recupero dei film popolari.');
+        return throwError(error);
+      })
+    );
+  }
 
   bannerApiData(): Observable<any> {
-    // return this.http.get(`${this.API_URL}/trending/all/week?api_key=${this.API_KEY}`);
-    return this.http.get(`${this.API_URL}movie/popular?api_key=${this.API_KEY}`);
+    return this.http.get(`${this.API_URL}movie/popular?api_key=${this.API_KEY}`).pipe(
+      catchError(error => {
+        this.alertService.showError('Errore durante il recupero dei dati del banner.');
+        return throwError(error);
+      })
+    );
   }
 
-
-
-
-  // searchmovive
   getSearchMovie(data: any): Observable<any> {
     console.log(data, 'movie#');
-
-    return this.http.get(`${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${data.movieName}`);
+    return this.http.get(`${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${data.movieName}`).pipe(
+      catchError(error => {
+        this.alertService.showError('Errore durante la ricerca del film.');
+        return throwError(error);
+      })
+    );
   }
 
-  // getmoviedatails
   getMovieDetails(data: any): Observable<any> {
-    return this.http.get(`${this.API_URL}/movie/${data}?api_key=${this.API_KEY}`)
+    return this.http.get(`${this.API_URL}/movie/${data}?api_key=${this.API_KEY}`).pipe(
+      catchError(error => {
+        this.alertService.showError('Errore durante il recupero dei dettagli del film.');
+        return throwError(error);
+      })
+    );
   }
 
-  // getMovieVideo
   getMovieVideo(data: any): Observable<any> {
-    return this.http.get(`${this.API_URL}/movie/${data}/videos?api_key=${this.API_KEY}`)
+    return this.http.get(`${this.API_URL}/movie/${data}/videos?api_key=${this.API_KEY}`).pipe(
+      catchError(error => {
+        this.alertService.showError('Errore durante il recupero del video del film.');
+        return throwError(error);
+      })
+    );
   }
-
 
   getMovieRating(data: any): Observable<any> {
-    return this.http.get(`${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${data.movieName.vote_average}`);
+    return this.http.get(`${this.API_URL}/search/movie?api_key=${this.API_KEY}&query=${data.movieName.vote_average}`).pipe(
+      catchError(error => {
+        this.alertService.showError('Errore durante il recupero del rating del film.');
+        return throwError(error);
+      })
+    );
   }
 
-  // getMovieCast
   getMovieCast(data: any): Observable<any> {
-    return this.http.get(`${this.API_URL}/movie/${data}/credits?api_key=${this.API_KEY}`)
+    return this.http.get(`${this.API_URL}/movie/${data}/credits?api_key=${this.API_KEY}`).pipe(
+      catchError(error => {
+        this.alertService.showError('Errore durante il recupero del cast del film.');
+        return throwError(error);
+      })
+    );
   }
-  // action
+
   fetchActionMovies(): Observable<any> {
-    return this.http.get(`${this.API_URL}/discover/movie?api_key=${this.API_KEY}&with_genres=28`);
+    return this.http.get(`${this.API_URL}/discover/movie?api_key=${this.API_KEY}&with_genres=28`).pipe(
+      catchError(error => {
+        this.alertService.showError('Errore durante il recupero dei film d\'azione.');
+        return throwError(error);
+      })
+    );
   }
-
-
-
-
 }
-
