@@ -1,3 +1,4 @@
+import { Pdfdownload } from './../../service/pdf-download.services';
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MovieApiServicesService } from 'src/app/service/movie-api-services.service';
@@ -9,7 +10,8 @@ import { MovieApiServicesService } from 'src/app/service/movie-api-services.serv
 })
 export class HomeComponent implements OnInit{
 
-  constructor (private service:MovieApiServicesService){}
+  constructor (private service:MovieApiServicesService,
+    private pdfDownload: Pdfdownload){}
 
 
   bannerResult: any = [];
@@ -41,6 +43,22 @@ export class HomeComponent implements OnInit{
         // Altrimenti, gestisci il caso in cui lo stato non sia 200
         console.error('La chiamata ha restituito uno stato diverso da 200:', result.status);
       }
+    });
+  }
+
+  downloadAndSavePdf() {
+    this.pdfDownload.downloadPdf().subscribe((pdfBlob) => {
+      // Crea un oggetto URL temporaneo per il blob
+      const blobUrl = window.URL.createObjectURL(pdfBlob);
+
+      // Crea un elemento <a> per il download del PDF
+      const anchor = document.createElement('a');
+      anchor.href = blobUrl;
+      anchor.download = 'dummy.pdf'; // Nome del file
+      anchor.click();
+
+      // Rilascia la risorsa dell'URL temporaneo
+      window.URL.revokeObjectURL(blobUrl);
     });
   }
 
