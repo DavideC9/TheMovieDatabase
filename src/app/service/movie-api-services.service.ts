@@ -1,6 +1,6 @@
 import { AlertServiceService } from './alert-service.service';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 @Injectable({
@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class MovieApiServicesService {
   //  API_KEY = 'f872ad90dd1';
-  API_KEY = 'f872ad90dd';
+  API_KEY = 'f872ad90dd12e535318c7200a765e5e5';
    API_URL = 'https://api.themoviedb.org/3/';
 
   constructor(private http: HttpClient, private alertService: AlertServiceService)  { }
@@ -33,9 +33,9 @@ export class MovieApiServicesService {
     );
   }
 
-  bannerApiData(): Observable<any> {
-    return this.http.get(`${this.API_URL}movie/popular?api_key=${this.API_KEY}`).pipe(
-      catchError(error => {
+  bannerApiData(): Observable<HttpResponse<any>> {
+    return this.http.get(`${this.API_URL}movie/popular?api_key=${this.API_KEY}`, { observe: 'response' }).pipe(
+      catchError((error: HttpResponse<any>) => {
         this.alertService.showError('Errore durante il recupero dei dati del banner.');
         return throwError(error);
       })

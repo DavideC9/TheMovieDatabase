@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MovieApiServicesService } from 'src/app/service/movie-api-services.service';
 
@@ -28,11 +29,21 @@ export class HomeComponent implements OnInit{
 
   // bannerdata
   bannerData() {
-    this.service.bannerApiData().subscribe((result) => {
+    this.service.bannerApiData().subscribe((result: HttpResponse<any>) => {
       console.log(result, 'filmbannerresult#');
-      this.bannerResult = result.results;
+      this.bannerResult = result.body.results; // Assumendo che i dati siano nel corpo della risposta
+      console.log('Lo status è', result.status);
+
+      if (result.status === 200) {
+        // La chiamata è andata a buon fine (stato 200)
+        console.log('La risposta è 200', result);
+      } else {
+        // Altrimenti, gestisci il caso in cui lo stato non sia 200
+        console.error('La chiamata ha restituito uno stato diverso da 200:', result.status);
+      }
     });
   }
+
 
 
 
