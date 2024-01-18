@@ -1,44 +1,43 @@
-<div class="contain-fluid">
-    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active" data-bs-interval="10000" *ngFor="let b of actionMovieResult;let i=index" [ngClass]="{active:i===1}">
-                <img src="https://image.tmdb.org/t/p/original/{{ b.backdrop_path }}" class="d-block w-100" alt="..." [routerLink]="['/film-detail',b.id]">
-                <div class=" carousel-caption d-none d-md-block ">
-                    <h2>{{b.original_title}}</h2>
-                    <p>{{b.overview}}</p>
-                </div>
-            </div>
+<ngb-carousel *ngIf="bannerResult as bannerMovies">
+    <ng-template ngbSlide *ngFor="let b of bannerMovies;let i=index">
+        <div class="picsum-img-wrapper">
+          <img [routerLink]="['/film-detail',b.id]"
+               alt="..."  src="https://image.tmdb.org/t/p/original/{{ b?.backdrop_path }}">
         </div>
-        <button class="carousel-control-prev " type="button " data-bs-target="#carouselExampleDark " data-bs-slide="prev ">
-      <span class="carousel-control-prev-icon " aria-hidden="true "></span>
-      <span class="visually-hidden ">Previous</span>
-    </button>
-        <button class="carousel-control-next " type="button " data-bs-target="#carouselExampleDark " data-bs-slide="next ">
-      <span class="carousel-control-next-icon " aria-hidden="true "></span>
-      <span class="visually-hidden ">Next</span>
-    </button>
-    </div>
-</div>
-
-<button (click)="downloadAndSavePdf()">Scarica PDF</button>
+        <div class="carousel-caption">
+          <h2>{{b?.original_title}}</h2>
+          <p>{{b?.overview}}</p>
+        </div>
+    </ng-template>
+</ngb-carousel>
 
 
+<div class="mt-4 p-4">
 
-<div class="mt-4 p-4 ">
     <h2 class="text-white ">Ultime Uscite</h2>
-    <div class="row ">
-        <div class="col-lg-8 " *ngFor="let c of trendingMovieResult ">
+    <div *ngIf="trendingMovieResults$ | async as trendingMovies" class="row ">
+        <div *ngFor="let trendingMovie of trendingMovies " class="col-lg-8 ">
             <div class="row mt-2 mb-2 ">
                 <div class="col-lg-4 ">
-                    <img src="https://image.tmdb.org/t/p/original/{{ c.poster_path }} " [routerLink]="[ '/film-detail',c.id] ">
+                    <img [routerLink]="[ '/film-detail',trendingMovie?.id] "
+                         src="https://image.tmdb.org/t/p/original/{{ trendingMovie?.poster_path }} ">
                 </div>
                 <div class="col-lg-8 ">
-                    <h3 class="text-white ">{{c.title}}</h3>
-                    <p class="text-white ">{{c.overview}}</p>
+                    <h3 class="text-white ">{{trendingMovie?.title}}</h3>
+                    <p class="text-white ">{{trendingMovie?.overview}}</p>
                 </div>
             </div>
-
         </div>
-
     </div>
+
+
+    <mat-paginator #paginator
+                   (page)="pageChanged($event)"
+                   [length]="totalMovies"
+                   [pageIndex]="currentPage"
+                   [pageSizeOptions]="pageSizeOptions"
+                   [pageSize]="pageSize"
+                   [showFirstLastButtons]="true">
+    </mat-paginator>
 </div>
+

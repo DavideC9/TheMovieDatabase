@@ -1,6 +1,9 @@
-import { MovieApiServicesService } from 'src/app/service/movie-api-services.service';
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {FacadeService} from "../facade-service/facade.service";
+import {forkJoin, Observable, Subscription, throwError} from "rxjs";
+import {catchError, map, tap} from "rxjs/operators";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 
@@ -10,65 +13,83 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './film-detail.component.html',
   styleUrls: ['./film-detail.component.css']
 })
-export class FilmDetailComponent implements OnInit{
+export class FilmDetailComponent implements OnInit, OnDestroy{
 
+  public getMovieDetailResult:any;
+  public combineMovieDetail$: Observable<any>;
+  public subscriptions: Subscription[] = [];
+  constructor(private router: ActivatedRoute,
+              private snackBar: MatSnackBar,
+              private facade: FacadeService){}
 
-  startRating= 0 ;
-
-  constructor(private service: MovieApiServicesService, private router: ActivatedRoute){}
-  getMovieDetailResult:any;
-  getMovieVideoResult:any;
-  getMovieCastResult: any;
-  // getMovieRating: any;
 
 
 
   ngOnInit(): void {
-    let getParamId = this.router.snapshot.paramMap.get('id');
-    console.log(getParamId,'getparamid#')
-
-    // this.getMovieRating(getParamId);
-    this.getMovie(getParamId);
-    this.getVideo(getParamId);
-    this.getMovieCast(getParamId);
-
+    const movieId = this.router.snapshot.paramMap.get('id');
+    console.log(movieId,'getparamid#')
+    this.combineMovieDetail$ = this.combineMovieDetails$(movieId);
   }
 
-  getMovie(id: any){
-    this.service.getMovieDetails(id).subscribe((result)=>{
-      console.log(result, 'getmoviedetails#');
-      this.getMovieDetailResult = result;
-    });
+  public combineMovieDetails$(id: any): Observable<any> {
+    return forkJoin({
+      movieDetails: this.facade.getMovieDetails(id),
+      movieVideo: this.facade.getMovieVideo(id),
+      movieCast: this.facade.getMovieCast(id)
+    }).pipe(
+        tap((res) =>
+        console.log(res.movieDetails)),
+        map((results: any) => ({
+          getMovieDetailResult: results.movieDetails,
+          getMovieVideoResult: results.movieVideo.results.find((element: any) => element.type === "Trailer")?.key,
+          getMovieCastResult: results.movieCast.cast
+        })),
+        catchError(error => {
+          console.error('Errore durante il recupero dei film d\'azione.');
+          return throwError(error);
+        })
+    );
   }
 
+    public addToFavorites() {
+        const sb = this.combineMovieDetail$
+            .pipe(
+                tap((combinedData: any) => {
+                    if (!combinedData || !combinedData.getMovieDetailResult || !combinedData.getMovieDetailResult.id) {
+                        console.error('Impossibile aggiungere ai preferiti: dettagli del film mancanti o ID non definito.');
+                        return;
+                    }
 
-  // getRating(id: any){
-  //   this.service.getMovieRating(id).subscribe((result)=>{
-  //     console.log(result, 'getmovieRating#');
-  //     this.getMovieRating = result;
-  //   });
-  // }
+                    const favorites = JSON.parse(localStorage.getItem('favoriteMovies') || '[]');
+                    const movieToAdd = {
+                        id: combinedData.getMovieDetailResult.id,
+                        title: combinedData.getMovieDetailResult.original_title,
+                    };
 
-  getVideo(id:any){
-    this.service.getMovieVideo(id).subscribe((result)=>{
-      console.log(result,'getMovieVideo#')
-      result.results.forEach((element : any) => {
-        if (element.type == "Trailer"){
-          this.getMovieVideoResult = element.key;
-        }
+                    const isAlreadyAdded = favorites.some((movie: any) => movie.id === movieToAdd.id);
 
-      });
+                    if (!isAlreadyAdded) {
+                        favorites.push(movieToAdd);
+                        localStorage.setItem('favoriteMovies', JSON.stringify(favorites));
+                        this.snackBar.open('Film aggiunto ai Preferiti!', 'Chiudi', {
+                            duration: 3000,
+                            horizontalPosition: 'end',
+                            verticalPosition: 'bottom',
+                        });
+                    } else {
+                        this.snackBar.open('Il film è già presente nei preferiti', 'Chiudi', {
+                            duration: 3000,
+                            horizontalPosition: 'end',
+                            verticalPosition: 'bottom',
+                        });
+                    }
+                }),
+            )
+            .subscribe();
+        this.subscriptions.push(sb);
+    }
 
-    });
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
-
-  getMovieCast(id:any){
-    this.service.getMovieCast(id).subscribe((result)=>{
-      console.log(result,'movieCast#')
-      this.getMovieCastResult = result.cast;
-
-    });
-
-  }
-
 }

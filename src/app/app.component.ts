@@ -1,37 +1,79 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ModalLoginComponent} from "./core/components/modal-login/modal-login.component";
+import {Router} from "@angular/router";
+import {FacadeService} from "./pages/facade-service/facade.service";
+import {tap} from "rxjs/operators";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+
+
+    title = 'TheMovieDatabase';
+    private accessTokenKey = 'accessToken';
+    public accessToken = 'accessToken';
+    public refreshToken = 'refreshToken';
+    public userId = 'UserID';
+    public subscriptions: Subscription[] = [];
 
 
 
-  title = 'TheMovieDatabase';
-  navbg: any;
-  @HostListener('document:scroll') scrollover(){
-    console.log(document.body.scrollTop,'scrolllength#');
-
-    if(document.body.scrollTop > 0 || document.documentElement.scrollTop > 0)
-    {
-      this.navbg = {
-        'background-color':'#000000'
-      }
-    }else
-    {
-        this.navbg = {}
+    constructor(private ngbModal: NgbModal,
+                private router: Router,
+                private facade: FacadeService) {
     }
-  }
-  constructor() {}
 
-  ngOnInit() {
+    ngOnInit() {
+        if (this.checkToken()){
+            this.facade.setIsLoggedIn(true);
+        }
+        const sb = this.checkIfUsersHasAlreadyLoggedIn$().subscribe();
+        this.subscriptions.push(sb);
+    }
 
-  }
+
+    public openModalForRegistrationAndLogin() {
+        const modalRef = this.ngbModal.open(ModalLoginComponent, {
+            centered: true,
+            beforeDismiss: () => {
+                return false;
+            }
+        });
+        modalRef.result.then((result) => {
+            if (result) {
+                this.facade.setIsLoggedIn(true);
+                this.router.navigate(['/']);
+            }
+        })
+    }
+
+    public checkIfUsersHasAlreadyLoggedIn$():Observable<any> {
+        return this.facade.getIsLoggedIn$().pipe(
+            tap((res) => {
+                if (res === false || !this.checkToken()){
+                    this.openModalForRegistrationAndLogin();}
+            })
+        );
+    }
 
 
-  newUser(){
+    public getIsThereAccessToken(): boolean {
+        const accessToken = localStorage.getItem(this.accessTokenKey);
+        return !!accessToken ? JSON.parse(accessToken) : null;
+    }
 
-  }
+    private checkToken(): boolean {
+        return !!(localStorage.getItem(this.accessToken) && localStorage.getItem(this.accessToken)
+            && localStorage.getItem(this.userId));
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    }
+
 }

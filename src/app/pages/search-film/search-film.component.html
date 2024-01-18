@@ -1,0 +1,52 @@
+<div class="contain mt-5 p-5">
+    <form [formGroup]="searchForm" (ngSubmit)="submitForm()">
+        <div class="row">
+            <div class="mb-3 col-4">
+                <input type="text" class="form-control" formControlName="movieName" placeholder="Search movie here..">
+            </div>
+            <div class="mb-3 col-4">
+                <input type="text" class="form-control" formControlName="actressName" placeholder="Search by actress..">
+            </div>
+            <div class="mb-3 col-4">
+                <input type="text" class="form-control" formControlName="genre" placeholder="Search by gender..">
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <button class="btn btn-md">Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row" *ngIf="searchResult">
+        <div class="col-8 mt-2">
+
+            Clicca sull'immagine per visualizzare maggiori dettagli
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-8" *ngFor="let s of searchResult">
+            <div class="row">
+                <div class="col-lg-3 mt-4 mb-4" *ngIf="s?.poster_path">
+                    <a class="details-link" (click)="showDetails(s.id)">
+                        <img src="https://image.tmdb.org/t/p/original/{{ s?.poster_path }}">
+                    </a>
+                </div>
+                <div class="col-lg-8 mt-4 mb-4">
+                    <h5>{{s?.original_title}} {{s?.release_date}}</h5>
+                    <p>{{s?.overview}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-paginator *ngIf="searchResult?.length > 0"
+               [length]="searchResult?.length"
+               [pageSize]="10"
+               [pageSizeOptions]="[10,20,50]"
+               showFirstLastButtons
+               (page)="handlePage($event)">
+</mat-paginator>
+
+
