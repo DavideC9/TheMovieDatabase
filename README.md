@@ -37,6 +37,8 @@ This application has been Dockerized for easy deployment. The Docker configurati
 - **Home Component:** Displays new arrivals.
 - **Search Section:** Allows users to search for movies.
 - **Favorites Section:** Enables users to save movies locally.
+- **Details Section:** Displays details of the selected movie.
+- **Categories Section:** Dedicated section for browsing movie categories.
 
 ## Getting Started
 
