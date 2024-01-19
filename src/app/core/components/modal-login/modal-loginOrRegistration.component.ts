@@ -57,7 +57,6 @@ export class ModalLoginOrRegistrationComponent implements OnInit, OnDestroy {
         localStorage.setItem(this.userId, response?.body?.userId);
         this.pagesFacade.setIsLoggedIn(true);
         this.activeModal.close(true);
-        console.log(response);
       }),
       catchError((error) => {
         console.error(error)
