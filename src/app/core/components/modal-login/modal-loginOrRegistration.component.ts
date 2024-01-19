@@ -10,10 +10,10 @@ import {ISignup} from "../../models/ISignup";
 
 @Component({
   selector: 'app-modal-login',
-  templateUrl: './modal-login.component.html',
-  styleUrls: ['./modal-login.component.css']
+  templateUrl: './modal-loginOrRegistration.component.html',
+  styleUrls: ['./modal-loginOrRegistration.component.css']
 })
-export class ModalLoginComponent implements OnInit, OnDestroy {
+export class ModalLoginOrRegistrationComponent implements OnInit, OnDestroy {
   public password: string = '';
   public accessToken = 'accessToken';
   public refreshToken = 'refreshToken';

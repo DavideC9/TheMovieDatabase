@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {ModalLoginComponent} from "./core/components/modal-login/modal-login.component";
 import {Router} from "@angular/router";
 import {FacadeService} from "./pages/facade-service/facade.service";
 import {tap} from "rxjs/operators";
 import {Observable, Subscription} from "rxjs";
+import {ModalLoginOrRegistrationComponent} from "./core/components/modal-login/modal-loginOrRegistration.component";
 
 @Component({
     selector: 'app-root',
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     public openModalForRegistrationAndLogin() {
-        const modalRef = this.ngbModal.open(ModalLoginComponent, {
+        const modalRef = this.ngbModal.open(ModalLoginOrRegistrationComponent, {
             centered: true,
             beforeDismiss: () => {
                 return false;
