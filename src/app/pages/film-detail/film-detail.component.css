@@ -1,0 +1,30 @@
+img {
+    width: 100%;
+    height: auto;
+}
+
+h1 {
+    color: white;
+    font-weight: bold;
+}
+
+p {
+    color: white;
+    font-size: 15px;
+}
+
+a {
+    background-color: red;
+    color: white;
+}
+
+a:hover {
+    background-color: blue;
+    color: white;
+    border: 2px solid white;
+}
+
+.text {
+    margin: 12px 6px;
+    letter-spacing: 0.6px;
+}

@@ -1,0 +1,23 @@
+button {
+    background-color: red;
+    color: white;
+}
+
+button:hover {
+    /*hover selector to change the style of a button when you move the mouse over it */
+    background-color: blue;
+    color: white;
+}
+
+.details-link:hover {
+    transform: scale(1.09);
+    cursor: pointer;
+}
+
+img {
+    width: 100%;
+}
+
+h5 {
+    color: white;
+}

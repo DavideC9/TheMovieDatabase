@@ -1,0 +1,45 @@
+<div class="contain mt-5" *ngIf="combineMovieDetail$ | async as combinedData">
+  <div class="row p-5">
+    <div class="col-lg-4" *ngIf="combinedData?.getMovieDetailResult?.poster_path">
+      <img src="https://image.tmdb.org/t/p/original/{{ combinedData?.getMovieDetailResult?.poster_path }}">
+    </div>
+    <div class="col-lg-6 mt-5 p-4">
+      <h1 class="mt-2 mb-2">{{combinedData?.getMovieDetailResult?.original_title}}</h1>
+      <p *ngIf="combinedData?.getMovieDetailResult?.vote_average" style="color: #F44336;">
+        Vote: {{combinedData?.getMovieDetailResult?.vote_average | number: '1.0-0'}}
+      </p>
+      <p class="mt-6 mb-6">{{combinedData?.getMovieDetailResult?.overview}}</p>
+      <h5
+        class="mt-6 mb-6"> Anno di
+        uscita {{combinedData?.getMovieDetailResult?.release_date[0]}}{{combinedData?.getMovieDetailResult?.release_date[1]}}{{combinedData?.getMovieDetailResult?.release_date[2]}}{{combinedData?.getMovieDetailResult?.release_date[3]}}
+      </h5>
+      <br>
+      <div class="row">
+        <div class="col-3">
+          <a class="btn btn-md" href="https://www.themoviedb.org/video/play?key={{combinedData?.getMovieVideoResult}}"
+             target="_blank">Trailer</a>
+        </div>
+        <div class="col-9">
+          <a class="btn btn-md" (click)="addToFavorites()">Aggiungi ai Preferiti</a>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <h2 class="text-white">Cast</h2>
+      <div class="col-lg-4" *ngFor="let actor of combinedData.getMovieCastResult">
+        <div class="row mt-2 mb-2">
+          <div class="col-lg-5" *ngIf="actor?.profile_path">
+            <img src="https://image.tmdb.org/t/p/original/{{ actor?.profile_path}}">
+          </div>
+          <div class="col-lg-8">
+            <h3 class="text-white">{{actor?.original_name}}</h3>
+            <p class="text-white">{{actor?.character}}</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</div>

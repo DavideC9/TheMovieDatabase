@@ -1,0 +1,12 @@
+body {
+    font-family: "Poppins", sans-serif;
+    /* background-image: url("./assets/sfondo.jpg"); */
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
+    background-color: black;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
